@@ -1,0 +1,180 @@
+<html>
+<head>
+<style>
+div.leftColumn {
+  position: relative;
+}
+div.rightColumn {
+  position: relative;
+  top: -2800px;
+  left: 850px;
+}
+div.leftBox {
+  width: 700px;
+  height: 490px;
+  background-color: #ccccff;
+  padding: 10px;
+  margin: 50px;
+  
+  text-align: center;
+  vertical-align: middle;
+  line-height: 490px;
+
+  font-size: 75pt;
+}
+div.rightBox {
+  width: 700px;
+  height: 490px;
+  background-color: #ccffcc;
+  padding: 10px;
+  margin: 50px;
+
+  text-align: center;
+  vertical-align: middle;
+  line-height: 490px;
+  
+  font-size: 50pt;
+}
+</style>
+<script>
+var matches = [
+		['du', 'you'],
+		['Essen', 'food'],
+		['Fenster', 'window'],
+		['Pflanze', 'plant'],
+		['schwimmen', 'to swim']
+		]
+
+var leftSelected = [];
+var rightSelected = [];
+
+var leftArray = [ 'leftBox1',
+		'leftBox2',
+		'leftBox3',
+		'leftBox4',
+		'leftBox5' ]
+
+var rightArray = [ 
+		'rightBox1',
+		'rightBox2',
+		'rightBox3',
+		'rightBox4',
+		'rightBox5' ]
+		
+function resetLeftsToFalse() {
+	leftSelected = []
+		
+	for (let i=0; i<leftArray.length; i++) {
+		id = leftArray[i]
+		document.getElementById(id).style.border = ''
+	}
+}
+
+function resetRightsToFalse() {
+	rightSelected = []
+
+	for (let i=0; i<rightArray.length; i++) {
+		id = rightArray[i]
+		document.getElementById(id).style.border = ''
+	}
+}
+
+function resetSelectedToFalse() {
+	resetLeftsToFalse()
+	resetRightsToFalse()
+}
+
+function parseForMatches() {
+	if ( leftSelected.length > 0 && rightSelected.length > 0 ) {
+		console.log('left and right selected')
+	
+//		alert(document.getElementById(id).innerHTML)
+//		alert(leftSelected+' '+rightSelected)
+
+		var hideBoxes = false
+		for(let i = 0;i<matches.length;i++) {
+			if( matches[i][0] == document.getElementById(leftSelected[0]).innerHTML && 
+				matches[i][1] == document.getElementById(rightSelected[0]).innerHTML ) {
+				console.log('matched')
+				
+				hideBoxes = true
+				break
+			}
+		}
+
+		if( hideBoxes ) {
+			document.getElementById(leftSelected).style.visibility = 'hidden' 
+			document.getElementById(rightSelected).style.visibility = 'hidden' 
+		}
+
+		resetSelectedToFalse()
+	}
+}
+
+function selectLeftBox( id ) {
+//	console.log('leftSelected was '+leftSelected)
+//	console.log('border = '+document.getElementById(id).style.border)
+
+	if( leftSelected.length == 0 ) {
+		leftSelected = [id]
+		document.getElementById(id).style.border = 'thick solid #0000FF'
+	} else {
+		resetLeftsToFalse()
+
+		leftSelected = [id]
+		document.getElementById(id).style.border = 'thick solid #0000FF'
+	}
+	console.log('leftSelected set to '+leftSelected)
+
+	parseForMatches()	
+}
+
+function selectRightBox( id ) {
+//	console.log('rightSelected was '+rightSelected)
+
+	if( rightSelected.length == 0 ) {
+		rightSelected = [id]
+		document.getElementById(id).style.border = 'thick solid #0000FF'
+	} else {
+		resetRightsToFalse()
+		
+		rightSelected = [id]
+		document.getElementById(id).style.border = 'thick solid #0000FF'
+	}
+	console.log('rightSelected set to '+rightSelected)
+
+	parseForMatches()	
+}
+</script>
+</head>
+<body>
+<div class="leftColumn">
+<div class="leftBox" id="leftBox1" onclick="javascript:selectLeftBox('leftBox1')">left box 1</div>
+<div class="leftBox" id="leftBox2" onclick="javascript:selectLeftBox('leftBox2')">left box 2</div>
+<div class="leftBox" id="leftBox3" onclick="javascript:selectLeftBox('leftBox3')">left box 3</div>
+<div class="leftBox" id="leftBox4" onclick="javascript:selectLeftBox('leftBox4')">left box 4</div>
+<div class="leftBox" id="leftBox5" onclick="javascript:selectLeftBox('leftBox5')">left box 5</div>
+</div>
+<div class="rightColumn">
+<div class="rightBox" id="rightBox1" onclick="javascript:selectRightBox('rightBox1')">right box 1</div>
+<div class="rightBox" id="rightBox2" onclick="javascript:selectRightBox('rightBox2')">right box 2</div>
+<div class="rightBox" id="rightBox3" onclick="javascript:selectRightBox('rightBox3')">right box 3</div>
+<div class="rightBox" id="rightBox4" onclick="javascript:selectRightBox('rightBox4')">right box 4</div>
+<div class="rightBox" id="rightBox5" onclick="javascript:selectRightBox('rightBox5')">right box 5</div>
+</div>
+<script>
+
+for(let i=0;i<leftArray.length;i++) {
+	document.getElementById(leftArray[i]).innerHTML = matches[i][0]
+}
+
+var tmpMatches = matches.slice()
+for(let i=0;i<rightArray.length;i++) {
+	var j = Math.floor(Math.random()*tmpMatches.length)
+	var pairSelected = tmpMatches.splice(j,1)
+	document.getElementById(rightArray[i]).innerHTML = pairSelected[0][1]
+}
+
+</script>
+</body>
+</html>
