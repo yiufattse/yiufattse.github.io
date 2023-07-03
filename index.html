@@ -1,5 +1,7 @@
 <html>
 <head>
+<script src="./jquery-latest.min.js" type="text/javascript"></script>
+<script src="./jquery.csv.min.js" type="text/javascript"></script>
 <style>
 div.leftColumn {
   position: relative;
@@ -37,14 +39,6 @@ div.rightBox {
 }
 </style>
 <script>
-var matches = [
-		['du', 'you'],
-		['Essen', 'food'],
-		['Fenster', 'window'],
-		['Pflanze', 'plant'],
-		['schwimmen', 'to swim']
-		]
-
 var leftSelected = [];
 var rightSelected = [];
 
@@ -60,10 +54,24 @@ var rightArray = [
 		'rightBox3',
 		'rightBox4',
 		'rightBox5' ]
-		
+
+function getFile(url) {
+	var xhttp = new XMLHttpRequest();
+	var buffer = ''
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			buffer = this.responseText
+		}
+	};
+	xhttp.open("GET", url, false);
+	xhttp.send(null);
+
+	return buffer
+} 
+
 function resetLeftsToFalse() {
 	leftSelected = []
-		
+
 	for (let i=0; i<leftArray.length; i++) {
 		id = leftArray[i]
 		document.getElementById(id).style.border = ''
@@ -87,7 +95,7 @@ function resetSelectedToFalse() {
 function parseForMatches() {
 	if ( leftSelected.length > 0 && rightSelected.length > 0 ) {
 		console.log('left and right selected')
-	
+
 //		alert(document.getElementById(id).innerHTML)
 //		alert(leftSelected+' '+rightSelected)
 
@@ -96,7 +104,7 @@ function parseForMatches() {
 			if( matches[i][0] == document.getElementById(leftSelected[0]).innerHTML && 
 				matches[i][1] == document.getElementById(rightSelected[0]).innerHTML ) {
 				console.log('matched')
-				
+
 				hideBoxes = true
 				break
 			}
@@ -126,7 +134,7 @@ function selectLeftBox( id ) {
 	}
 	console.log('leftSelected set to '+leftSelected)
 
-	parseForMatches()	
+	parseForMatches()
 }
 
 function selectRightBox( id ) {
@@ -137,13 +145,13 @@ function selectRightBox( id ) {
 		document.getElementById(id).style.border = 'thick solid #0000FF'
 	} else {
 		resetRightsToFalse()
-		
+
 		rightSelected = [id]
 		document.getElementById(id).style.border = 'thick solid #0000FF'
 	}
 	console.log('rightSelected set to '+rightSelected)
 
-	parseForMatches()	
+	parseForMatches()
 }
 </script>
 </head>
@@ -163,6 +171,25 @@ function selectRightBox( id ) {
 <div class="rightBox" id="rightBox5" onclick="javascript:selectRightBox('rightBox5')">right box 5</div>
 </div>
 <script>
+
+var matchesCsv = getFile('./vocabulary.csv')
+
+//var matchesCsv = 'du, you\n' +
+//'Essen, food\n' +
+//'Fenster, window\n' +
+//'Pflanze, plant\n' +
+//'schwimmen, to swim\n'
+//
+//var matches = [
+//		['du', 'you'],
+//		['Essen', 'food'],
+//		['Fenster', 'window'],
+//		['Pflanze', 'plant'],
+//		['schwimmen', 'to swim']
+//		]
+
+var matches = $.csv2Array( matchesCsv )
+
 
 for(let i=0;i<leftArray.length;i++) {
 	document.getElementById(leftArray[i]).innerHTML = matches[i][0]
