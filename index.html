@@ -190,7 +190,9 @@ var matchesCsv = getFile('./vocabulary.csv')
 
 var matches = $.csv2Array( matchesCsv )
 for( item in matches) {
-	matches[item][1] = matches[item][1].replace(/^\s/,'')
+	if(matches[item].length == 2) {
+		matches[item][1] = matches[item][1].replace(/^\s/,'')
+	}
 }
 var matchesClone = matches.slice()
 
