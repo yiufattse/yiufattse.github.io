@@ -189,17 +189,27 @@ var matchesCsv = getFile('./vocabulary.csv')
 //		]
 
 var matches = $.csv2Array( matchesCsv )
-
-
-for(let i=0;i<leftArray.length;i++) {
-	document.getElementById(leftArray[i]).innerHTML = matches[i][0]
+for( item in matches) {
+	matches[item][1] = matches[item][1].replace(/^\s/,'')
 }
+var matchesClone = matches.slice()
 
-var tmpMatches = matches.slice()
-for(let i=0;i<rightArray.length;i++) {
-	var j = Math.floor(Math.random()*tmpMatches.length)
-	var pairSelected = tmpMatches.splice(j,1)
-	document.getElementById(rightArray[i]).innerHTML = pairSelected[0][1]
+var count = 0
+var unselectedLeftArray = [0, 1, 2, 3 ,4]
+var unselectedRightArray = [0, 1, 2, 3 ,4]
+while( count < 5 ) {
+	let matchesIndex = Math.floor(Math.random()*matchesClone.length)
+	let leftIndex = Math.floor(Math.random()*unselectedLeftArray.length)
+	let rightIndex = Math.floor(Math.random()*unselectedRightArray.length)
+
+	let leftBoxId = leftArray[unselectedLeftArray.splice(leftIndex,1)]
+	let rightBoxId = rightArray[ unselectedRightArray.splice(rightIndex,1)]
+
+	let pairSelected = matchesClone.splice(matchesIndex,1)[0]
+	document.getElementById(leftBoxId).innerHTML = pairSelected[0]
+	document.getElementById(rightBoxId).innerHTML = pairSelected[1]
+
+	count++
 }
 
 </script>
